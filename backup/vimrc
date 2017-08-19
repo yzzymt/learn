@@ -1,0 +1,99 @@
+ "" Configuration file for vim
+set modelines=0		" CVE-2007-2438
+
+" Normally we use vim-extensions. If you want true vi-compatibility
+" remove change the following statements
+set nocompatible	" Use Vim defaults instead of 100% vi compatibility
+set backspace=2		" more powerful backspacing
+
+" Don't write backup file if vim is being called by "crontab -e"
+au BufWrite /private/tmp/crontab.* set nowritebackup nobackup
+" Don't write backup file if vim is being called by "chpass"
+au BufWrite /private/etc/pw.* set nowritebackup nobackup
+
+"set cursorline
+syntax on
+syntax enable
+highlight Comment ctermfg = yellow
+set nu
+set mouse=nicr
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+set autoindent
+
+set backspace=indent,eol,start
+set clipboard=unnamed
+"set cursorline
+
+"hi Cursorline cterm=NONE ctermbg=238
+"hi Cursorline cterm=NONE ctermbg=023
+"highlight Pmenu ctermfg=250 ctermbg=000
+highlight Pmenu ctermfg=245 ctermbg=None
+"hi NonText ctermfg=000
+hi NonText ctermfg=white
+hi LineNr ctermfg=white
+imap jj <Esc>:w<ENTER>
+imap jk <Esc>:wq<ENTER>
+nmap <Space> <Left>i<Space>
+nmap <C-J> <C-D>
+nmap <C-K> <C-U>
+set shiftwidth=4
+" For latex
+"inoremap $ $$<ESC>i
+inoremap \bm \bm{}<ESC>i
+inoremap \( \left({}\right)<ESC>F}i
+inoremap \[ \left[{}\right]<ESC>F}i
+" neocomplete command
+let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_smart_case = 1
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+" Dictionary for markdown.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'markdown' : $HOME.'/.vim/dict/ToIeCetCo.dict',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <s-tab> <Up>
+inoremap <expr><space>  pumvisible() ? neocomplete#close_popup() . "\<SPACE>" : "\<SPACE>"
+
+
+set completeopt=menu
+" Force to use english input method.
+"call system('fcitx-remote -c')
+
+let g:vim_markdown_math = 1
+autocmd FileType markdown highlight htmlH1 ctermbg=224 ctermfg=196
+autocmd FileType markdown highlight mkdBlockquote ctermbg=230 ctermfg=202
+ 
+" Auto change the input method. 
+" brew install fcitx-remote --with-input-method=general.
+" Need to change the short cut for change input method as ^+SHIFT+Z.
+"function! Fcitx2en()
+"    let input_status = system('fcitx-remote')
+"    if input_status == 2
+"        let b:inputtoggle = 1
+"        call system('fcitx-remote -c')
+"    endif
+"endfunction
+"function! Fcitx2zh()
+"    try
+"	if b:inputtoggle == 1
+"	    call system('fcitx-remote -o')
+"	    let b:inputtoggle = 0
+"	endif
+"    catch /inputtoggle/
+"        let b:inputtoggle = 0
+"    endtry
+"endfunction
+"au InsertLeave * call Fcitx2en()
+""au InsertEnter * call Fcitx2zh()
+"
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : neocomplete#start_manual_complete()
+"inoremap <s-tab> <Up>
+"
